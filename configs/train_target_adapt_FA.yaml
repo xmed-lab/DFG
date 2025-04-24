@@ -1,0 +1,56 @@
+# Experiment Specific
+experiment_name: 'SAM_UNet_Abdomen_MR2CT_FA'
+data_root: '/home/zhuaiaa/dfg/data/preprocess/Abdomen_Data'
+save_root: '/home/zhuaiaa/dfg/results/Target_Adapt/'
+source_model_path: '/home/zhuaiaa/dfg/results/Source_Seg/UNet_Abdomen_MR_Seg/exp_6_time_2024-03-07 14:39:37/saved_models/model_epoch_90_dice_0.8821.pth'
+
+target_sites:
+- 'CT'
+resume_dir: ''
+continue_train: False
+total_epochs: 5
+
+random_seed: 999
+organ_list:
+- 'Spleen'
+- 'R.Kidney'
+- 'L.Kidney'
+- 'Liver'
+
+# Dataloader Setting
+patient_level_dataloader: False
+img_size:
+- 256
+- 256
+batch_size: 16
+num_workers: 8
+
+# Model 
+arch: 'UNet'
+use_prototype: False
+update_prototype: False
+input_dim: 3
+feat_dim: 32
+output_dim: 64
+num_classes: 5
+num_prototypes: 1
+
+# Optim parameters
+lr: 0.0001
+
+# Loss parameters
+nav_t: 1
+beta: 0.001 #not used
+s_par: 0.5
+
+# display
+save_steps: 10
+#eval_steps: 5
+
+#fa
+eval_steps: 5
+display_steps: 4000000 #40
+save_visuals: False
+
+# test
+test: False

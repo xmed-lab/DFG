@@ -25,7 +25,7 @@ class SAM_Trainer():
         self.opt = opt
         
         #params for MedSAM prototype estimation
-        self.area_thresh_est = 800#200
+        #self.area_thresh_est = 800#200
         #self.area_thresh_deci = 500
         #self.bg_cos_thresh = 0.85
         self.proto = [0]
@@ -259,13 +259,13 @@ class SAM_Trainer():
         train_end_time = time.time()
 
         refine_time=refine_end_time-refine_start_time
-        self.visualizer.print(f"refine时间: {refine_time:.2f} 秒")
+        #self.visualizer.print(f"refine time: {refine_time:.2f} s")
 
         postprocess_time=postprocess_end_time-refine_end_time
-        self.visualizer.print(f"postprocess时间: {postprocess_time:.2f} 秒")
+        #self.visualizer.print(f"postprocess time: {postprocess_time:.2f} s")
 
         train_time=train_end_time-train_start_time
-        self.visualizer.print(f"100epoch total时间: {train_time:.2f} 秒")
+        #self.visualizer.print(f"100epoch total time: {train_time:.2f} s")
         
         
     def refine_sam(self):
@@ -342,11 +342,11 @@ class SAM_Trainer():
         self.visualizer.print(val_metrics)
         end_time = time.time()
         other_time=other_time+(end_time-start_time)
-        self.visualizer.print(f"refine other时间0: {other_time:.2f} 秒")
+        #self.visualizer.print(f"refine other time 0: {other_time:.2f} s")
 
-        self.visualizer.print(f"encoder时间: {self.encoder_time:.2f} 秒")
-        self.visualizer.print(f"decoder时间: {self.decoder_time:.2f} 秒")
-        self.visualizer.print(f"refine other时间123: {self.other_time123:.2f} 秒")
+        #self.visualizer.print(f"encoder time: {self.encoder_time:.2f} s")
+        #self.visualizer.print(f"decoder time: {self.decoder_time:.2f} s")
+        #self.visualizer.print(f"refine other time123: {self.other_time123:.2f} s")
         
         #sys.exit()
         #self.schedular.step()
@@ -404,7 +404,7 @@ class SAM_Trainer():
                 np.savez(os.path.join(self.opt['refine_postprocess_dir'],name),image = img,pl = pl,label = seg)
         end_time = time.time()
         other_time=other_time+(end_time - start_time)
-        self.visualizer.print(f"postprocess other时间: {other_time:.2f} 秒")
+        #self.visualizer.print(f"postprocess other time: {other_time:.2f} s")
         return
         
     def refine_pl_sam(self, val_imgs, val_segs, fea, predicts, val_names):
@@ -1087,7 +1087,7 @@ class SAM_Trainer():
             
             end_time = time.time()
             other_time = other_time +(end_time - start_time)
-        self.visualizer.print(f"100epoch other时间: {other_time:.2f} 秒")
+        #self.visualizer.print(f"100epoch other time: {other_time:.2f} s")
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 

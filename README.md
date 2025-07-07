@@ -1,12 +1,10 @@
 # Leveraging Segment Anything Model for Source-Free Domain Adaptation via Dual Feature Guided Auto-Prompting
 This repository contains Pytorch implementation of our source-free domain adaptation (SFDA) method with Dual Feature Guided (DFG) auto-prompting approach.
 
-<!-- ![method](./figures/method.png "")
+<!-- ![method](./figures/method.png "") -->
 ## Introduction
-[Context-Aware Pseudo-Label Refinement for Source-Free Domain Adaptive Fundus Image Segmentation](https://arxiv.org/pdf/2308.07731.pdf), MICCAI 2023
-
-In the domain adaptation problem, source data may be unavailable to the target client side due to privacy or intellectual property issues. Source-free unsupervised domain adaptation (SF-UDA) aims at adapting a model trained on the source side to align the target distribution with only the source model and unlabeled target data. The source model usually produces noisy and context-inconsistent pseudo-labels on the target domain, i.e., neighbouring regions that have a similar visual appearance are annotated with different pseudo-labels. 
-This observation motivates us to refine pseudo-labels with context relations. Another observation is that features of the same class tend to form a cluster despite the domain gap, which implies context relations can be readily calculated from feature distances. To this end, we propose a context-aware pseudo-label refinement method for SF-UDA. Specifically, a context-similarity learning module is developed to learn context relations. Next, pseudo-label revision is designed utilizing the learned context relations. Further, we propose calibrating the revised pseudo-labels to compensate for wrong revision caused by inaccurate context relations. Additionally, we adopt a pixel-level and class-level denoising scheme to select reliable pseudo-labels for domain adaptation. Experiments on cross-domain fundus images indicate that our approach yields the state-of-the-art results. -->
+Source-free domain adaptation (SFDA) for segmentation aims at adapting a model trained in the source domain to perform well in the target domain with only the source model and unlabeled target data. Inspired by the recent success of Segment Anything Model (SAM) which exhibits the generality of segmenting images of various modalities and in different domains given human-annotated prompts like bounding boxes or points, we for the first time explore the potentials of Segment Anything Model for SFDA via automatedly finding an accurate bounding box prompt. We find that the bounding boxes directly generated with existing SFDA approaches are defective due to the domain gap. To tackle this issue, we propose a novel Dual Feature Guided (DFG) auto-prompting approach to search for the box prompt. Specifically, the source model is first trained in a feature aggregation phase, which not only preliminarily adapts the source model to the target domain but also builds a feature distribution well-prepared for box prompt search. In the second phase, based on two feature distribution observations, we gradually expand the box prompt with the guidance of the target model feature and the SAM feature to handle the class-wise clustered target features and the class-wise dispersed target features, respectively. To remove the potentially enlarged false positive regions caused by the over-confident prediction of the target model, the refined pseudo-labels produced by SAM are further postprocessed based on connectivity analysis. 
+Experiments on 3D and 2D datasets indicate that our approach yields superior performance compared to conventional methods.
 
 ## Installation
 Create the environment from the `environment.yml` file:
@@ -16,22 +14,22 @@ conda activate dfg
 ```
 ## Data preparation
 * Download the BTCV dataset from [MICCAI 2015 Multi-Atlas Abdomen Labeling Challenge](https://www.synapse.org/#!Synapse:syn3193805/wiki/217789), and the CHAOS dataset from [2019 CHAOS Challenge](https://chaos.grand-challenge.org/). Then preprocess the downloaded data referring to `./preprocess.ipynb`.
-You can also directly download our preprocessed datasets from [here](https://drive.google.com/drive/folders/1g2ar0L18ryO9zlmVnl-1Ia-XrHkDODfN?usp=sharing).
+You can also directly download our preprocessed datasets from [here](https://drive.google.com/drive/folders/1g2ar0L18ryO9zlmVnl-1Ia-XrHkDODfN?usp=sharing). The paths to the datasets need to be specified in the yaml files in `./configs`.
 
 ## Training
 The following are the steps for the CHAOS (MRI) to BTCV (CT) adaptation.
 * Download the source domain model from [here](https://drive.google.com/file/d/18zhjTuy3LFqWMPckrhby8SX9-2muh1KQ/view?usp=sharing) or specify the data path in `configs/train_source_seg.yaml` and then run 
 ```
-python main_trainer_source.py --config_file configs/train_source_seg.yaml --gpu_id 0
+python main_trainer_source.py --config_file configs/train_source_seg.yaml
 ```
 * Download the trained model after the feature aggregation phase from [here](https://drive.google.com/file/d/1eOOnQ4Je9UrfJ-Hqf5e9aaHyUTK6-iMv/view?usp=sharing) or specify the source model path and data path in `configs/train_target_adapt_FA.yaml`, and then run
 ```
-python main_trainer_fa.py --config_file configs/train_target_adapt_FA.yaml --gpu_id 0
+python main_trainer_fa.py --config_file configs/train_target_adapt_FA.yaml
 ```
 * Download the MedSAM model checkpoint from [here](https://drive.google.com/file/d/1khQO5G-qYZsCkocEhZ-HhX8IioEUAZ9Q/view?usp=sharing) and put it under `./medsam/work_dir/MedSAM`.
 * Specify the model (after feature aggregation) path, data path, and refined pseudo-label paths in `configs/train_target_adapt_SAM.yaml`, and then run
 ```
-python main_trainer_sam.py --config_file configs/train_target_adapt_SAM.yaml --gpu_id 0
+python main_trainer_sam.py --config_file configs/train_target_adapt_SAM.yaml
 ```
 <!--
 ## Result

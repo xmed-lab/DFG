@@ -170,8 +170,7 @@ class FA_Trainer():
         self.train()
         
     def train(self):
-        start_time = time.time()
-        other_time=0
+
         for epoch in range(self.start_epoch,self.total_epochs):
             train_iterator = tqdm((self.train_dataloader), total = len(self.train_dataloader))
             train_losses = {}
@@ -186,7 +185,7 @@ class FA_Trainer():
                         train_losses[k] = v + train_losses.get(k,0) 
                     train_iterator.set_description(f'Train Epoch [{epoch}/{self.total_epochs}]')
                     train_iterator.set_postfix(t2p_loss = train_losses['t2p_loss'].item()/(it+1), p2t_loss = train_losses['p2t_loss'].item()/(it+1), total_loss = train_losses['total_loss'].item()/(it+1))
-                other_start_time = time.time()
+
                 with self.iter_counter.time_measurement("maintenance"):
                     
                     if self.iter_counter.needs_displaying():
@@ -264,13 +263,9 @@ class FA_Trainer():
                         self.visualizer.plot_current_metrics(self.iter_counter.steps_so_far, val_metrics['asd'],'Asd_metrics')###
                         self.schedular.step()
                         print(self.schedular.get_last_lr())
-                other_end_time = time.time()
-                other_time = other_time+(other_end_time-other_start_time)
+
                 self.iter_counter.record_one_iteration()
             self.iter_counter.record_one_epoch()
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        print(f"5epoch总运行时间: {elapsed_time:.2f} 秒")
-        print(f"other运行时间: {other_time:.2f} 秒")
+
 
                 

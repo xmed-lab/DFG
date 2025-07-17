@@ -3,6 +3,7 @@ This repository contains Pytorch implementation of our source-free domain adapta
 
 <!-- ![method](./figures/method.png "") -->
 ## Introduction
+[Paper](https://arxiv.org/pdf/2505.08527)
 Source-free domain adaptation (SFDA) for segmentation aims at adapting a model trained in the source domain to perform well in the target domain with only the source model and unlabeled target data. Inspired by the recent success of Segment Anything Model (SAM) which exhibits the generality of segmenting images of various modalities and in different domains given human-annotated prompts like bounding boxes or points, we for the first time explore the potentials of Segment Anything Model for SFDA via automatedly finding an accurate bounding box prompt. We find that the bounding boxes directly generated with existing SFDA approaches are defective due to the domain gap. To tackle this issue, we propose a novel Dual Feature Guided (DFG) auto-prompting approach to search for the box prompt. Specifically, the source model is first trained in a feature aggregation phase, which not only preliminarily adapts the source model to the target domain but also builds a feature distribution well-prepared for box prompt search. In the second phase, based on two feature distribution observations, we gradually expand the box prompt with the guidance of the target model feature and the SAM feature to handle the class-wise clustered target features and the class-wise dispersed target features, respectively. To remove the potentially enlarged false positive regions caused by the over-confident prediction of the target model, the refined pseudo-labels produced by SAM are further postprocessed based on connectivity analysis. 
 Experiments on 3D and 2D datasets indicate that our approach yields superior performance compared to conventional methods.
 
@@ -43,6 +44,20 @@ python sim_learn.py --dataset Domain1 --model-file /path/to/source_model --pseud
 python pl_refine.py --dataset Domain1 --weights /path/to/context_similarity_model --logt 5 --pseudo /path/to/pseudo_label
 python train_target.py --dataset Domain1 --model-file /path/to/context_similarity_model --num_epochs 20
 ```
-
+ -->
 ## Acknowledgement
-We would like to thank the great work of the following open-source projects: [DPL](https://github.com/cchen-cc/SFDA-DPL), [AffinityNet](https://github.com/jiwoon-ahn/psa). -->
+We would like to thank the great work of the following open-source projects: [ProtoContra](https://github.com/CSCYQJ/MICCAI23-ProtoContra-SFDA), [MedSAM](https://github.com/bowang-lab/MedSAM).
+
+## Citation
+```
+@ARTICLE{11079936,
+  author={Huai, Zheang and Tang, Hui and Li, Yi and Chen, Zhuangzhuang and Li, Xiaomeng},
+  journal={IEEE Transactions on Medical Imaging}, 
+  title={Leveraging Segment Anything Model for Source-Free Domain Adaptation via Dual Feature Guided Auto-Prompting}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-1},
+  keywords={Adaptation models;Image segmentation;Foundation models;Data models;Biomedical imaging;Predictive models;Accuracy;Uncertainty;Training;Spleen;Source-free domain adaptation;Segment Anything Model;Prompt;Bounding box},
+  doi={10.1109/TMI.2025.3587733}}
+```

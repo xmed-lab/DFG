@@ -8,6 +8,7 @@ Source-free domain adaptation (SFDA) for segmentation aims at adapting a model t
 Experiments on 3D and 2D datasets indicate that our approach yields superior performance compared to conventional methods.
 
 ![introduction](./figures/introduction.png "")
+Take spleen in a target domain image in MRI⟶CT adaptation as an example. (a) MedSAM requires an accurate bounding box prompt. Neither a too-small nor a too-large bounding box leads to a decent segmentation result. (b) Segmentation results of ProtoContra and the corresponding bounding boxes, produced by different output probability thresholds. Due to the domain gap and limited knowledge from source model and target unlabeled data, it is hard for existing SFDA methods to generate precise box prompts even if we vary the probability threshold. (c) After feature aggregation, our dual feature guided bounding box prompt search approach can find an accurate box prompt for MedSAM to yield refined pseudo-labels. (d) The searching procedure of our proposed box prompt search method. The red numbers are indices of the boxes, corresponding to the horizontal axis in (e). (e) The number of pixels of changed MedSAM predictions when the box prompt is switched from the last to the current. MedSAM prediction keeps stable when the box prompt fluctuates near the ground truth. We utilize this property to find the optimal box prompt.
 
 Our method:
 ![method](./figures/method.PNG "")
